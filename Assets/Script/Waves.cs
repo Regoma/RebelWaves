@@ -16,6 +16,7 @@ public class Waves : MonoBehaviour
     [SerializeField] private float lineLenght;
     [SerializeField] private float lineVertex;
     [SerializeField] private float speed;
+    [SerializeField] private float marging;
 
     private float mousePos;
     private float t;
@@ -65,5 +66,25 @@ public class Waves : MonoBehaviour
         wave2Line.transform.localPosition = new Vector2(0, wave2.Evaluate(t % waveLenght) / 2 + 0.5f);
         wave3Line.transform.localPosition = new Vector2(0, wave3.Evaluate(t % waveLenght) / 2 + -0.5f);
         wave4Line.transform.localPosition = new Vector2(0, wave4.Evaluate(t % waveLenght) / 2 + -1.5f);
+
+        if (mousePos >= wave1.Evaluate(t % waveLenght) / 2 + 1.5f - marging && mousePos <= wave1.Evaluate(t % waveLenght) / 2 + 1.55f + marging)
+            wave1Line.transform.GetChild(0).gameObject.SetActive(true);
+        else
+            wave1Line.transform.GetChild(0).gameObject.SetActive(false);
+
+        if (mousePos >= wave2.Evaluate(t % waveLenght) / 2 + 0.5f - marging && mousePos <= wave2.Evaluate(t % waveLenght) / 2 + 0.5f + marging)
+            wave2Line.transform.GetChild(0).gameObject.SetActive(true);
+        else
+            wave2Line.transform.GetChild(0).gameObject.SetActive(false);
+
+        if (mousePos <= wave3.Evaluate(t % waveLenght) / 2 + -0.5f + marging && mousePos >= wave3.Evaluate(t % waveLenght) / 2 + -0.50f - marging)
+            wave3Line.transform.GetChild(0).gameObject.SetActive(true);
+        else
+            wave3Line.transform.GetChild(0).gameObject.SetActive(false);
+
+        if (mousePos <= wave4.Evaluate(t % waveLenght) / 2 + -1.5f + marging && mousePos >= wave4.Evaluate(t % waveLenght) / 2 + -1.5f - marging)
+            wave4Line.transform.GetChild(0).gameObject.SetActive(true);
+        else
+            wave4Line.transform.GetChild(0).gameObject.SetActive(false);
     }
 }
