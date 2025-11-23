@@ -1,0 +1,52 @@
+using UnityEngine;
+
+public class Request : MonoBehaviour
+{
+    [SerializeField] private float requestTime;
+    [SerializeField] private Sprite[] type;
+    [SerializeField] private Color[] typeColor;
+    [SerializeField] private int typeNb;
+
+    [SerializeField] private float requestComplition = 0;
+    private float startTime = 0;
+
+    void Start()
+    {
+        startTime = Time.time;
+        typeNb = Random.Range(0, type.Length);
+        InitRequest(typeNb);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(Time.time - startTime > requestTime)
+        {
+            Waves.instance.Happiness(-10);
+            Waves.instance.EndRequest(this);
+        }
+        else if (Waves.instance.wave == typeNb )
+        {
+            RequestUpdate(Time.deltaTime);
+        }
+    }
+
+    public void RequestUpdate(float x)
+    {
+        requestComplition += x;
+        if(requestComplition >= 5)
+        {
+            Waves.instance.Happiness(10);
+            Waves.instance.EndRequest(this);
+        }
+    }
+
+    public void InitRequest(int x)
+    {
+        SpriteRenderer _render = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        _render.sprite = type[x];
+        _render.color = typeColor[x];
+    }
+
+
+}

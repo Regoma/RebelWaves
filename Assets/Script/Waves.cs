@@ -1,7 +1,18 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Waves : MonoBehaviour
 {
+    public static Waves instance = null;
+
+    [SerializeField] private Image happinessBar;
+    [SerializeField] private float maxHappiness;
+    [SerializeField] private float happiness = 0;
+    [SerializeField] private List<Request> requests;
+    [SerializeField] private GameObject requestPrefab;
+    public int wave = -1;
+    [Space]
     [SerializeField] private AnimationCurve wave1;
     [SerializeField] private LineRenderer wave1Line;
     [SerializeField] private AnimationCurve wave2;
@@ -21,6 +32,10 @@ public class Waves : MonoBehaviour
     private float mousePos;
     private float t;
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -29,6 +44,7 @@ public class Waves : MonoBehaviour
         wave2Line.positionCount = 50;
         wave3Line.positionCount = 50;
         wave4Line.positionCount = 50;
+        InvokeRepeating("NewRequest", 1, 3);
     }
 
     // Update is called once per frame
@@ -68,23 +84,65 @@ public class Waves : MonoBehaviour
         wave4Line.transform.localPosition = new Vector2(0, wave4.Evaluate(t % waveLenght) / 2 + -1.5f);
 
         if (mousePos >= wave1.Evaluate(t % waveLenght) / 2 + 1.5f - marging && mousePos <= wave1.Evaluate(t % waveLenght) / 2 + 1.55f + marging)
+        {
             wave1Line.transform.GetChild(0).gameObject.SetActive(true);
-        else
-            wave1Line.transform.GetChild(0).gameObject.SetActive(false);
-
-        if (mousePos >= wave2.Evaluate(t % waveLenght) / 2 + 0.5f - marging && mousePos <= wave2.Evaluate(t % waveLenght) / 2 + 0.5f + marging)
-            wave2Line.transform.GetChild(0).gameObject.SetActive(true);
-        else
             wave2Line.transform.GetChild(0).gameObject.SetActive(false);
-
-        if (mousePos <= wave3.Evaluate(t % waveLenght) / 2 + -0.5f + marging && mousePos >= wave3.Evaluate(t % waveLenght) / 2 + -0.50f - marging)
-            wave3Line.transform.GetChild(0).gameObject.SetActive(true);
-        else
             wave3Line.transform.GetChild(0).gameObject.SetActive(false);
-
-        if (mousePos <= wave4.Evaluate(t % waveLenght) / 2 + -1.5f + marging && mousePos >= wave4.Evaluate(t % waveLenght) / 2 + -1.5f - marging)
-            wave4Line.transform.GetChild(0).gameObject.SetActive(true);
-        else
             wave4Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave = 0;
+        } 
+        else if (mousePos >= wave2.Evaluate(t % waveLenght) / 2 + 0.5f - marging && mousePos <= wave2.Evaluate(t % waveLenght) / 2 + 0.5f + marging)
+        {
+            wave1Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave2Line.transform.GetChild(0).gameObject.SetActive(true);
+            wave3Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave4Line.transform.GetChild(0).gameObject.SetActive(false);
+
+            wave = 1;
+        } 
+        else if (mousePos <= wave3.Evaluate(t % waveLenght) / 2 + -0.5f + marging && mousePos >= wave3.Evaluate(t % waveLenght) / 2 + -0.50f - marging)
+        {
+            wave1Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave2Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave3Line.transform.GetChild(0).gameObject.SetActive(true);
+            wave4Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave = 2;
+        } 
+        else if (mousePos <= wave4.Evaluate(t % waveLenght) / 2 + -1.5f + marging && mousePos >= wave4.Evaluate(t % waveLenght) / 2 + -1.5f - marging)
+        {
+            wave1Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave2Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave3Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave4Line.transform.GetChild(0).gameObject.SetActive(true);
+            wave = 3;
+        }
+        else
+        {
+            wave1Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave2Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave3Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave4Line.transform.GetChild(0).gameObject.SetActive(false);
+            wave = -1;
+        }
+    }
+
+    public void Happiness(float x)
+    {
+        happiness += x;
+        happinessBar.fillAmount = happiness / maxHappiness;
+    }
+
+    public void NewRequest()
+    {
+        if (requests.Count > 5)
+            return;
+        Request r = Instantiate(requestPrefab, new Vector3(Random.Range(-4f,8f), Random.Range(-3.5f,-4f),0),  Quaternion.identity).transform.GetComponent<Request>();
+        requests.Add(r);
+    }
+
+    public void EndRequest(Request r)
+    {
+        requests.Remove(r);
+        Destroy(r.gameObject);
     }
 }
