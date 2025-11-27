@@ -10,6 +10,9 @@ public class Request : MonoBehaviour
     [SerializeField] private float requestComplition = 0;
     private float startTime = 0;
 
+    private Animator anim;
+
+
     void Start()
     {
         startTime = Time.time;
@@ -24,6 +27,8 @@ public class Request : MonoBehaviour
         {
             Waves.instance.Happiness(-10);
             Waves.instance.EndRequest(this);
+
+            anim.Play("Request_fail");
         }
         else if (Waves.instance.wave == typeNb )
         {
@@ -38,6 +43,7 @@ public class Request : MonoBehaviour
         {
             Waves.instance.Happiness(10);
             Waves.instance.EndRequest(this);
+            anim.Play("Request_sucess");
         }
     }
 
@@ -46,6 +52,9 @@ public class Request : MonoBehaviour
         SpriteRenderer _render = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _render.sprite = type[x];
         _render.color = typeColor[x];
+
+        anim = transform.GetComponent<Animator>();
+
     }
 
 

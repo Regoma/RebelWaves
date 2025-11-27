@@ -11,6 +11,7 @@ public class Waves : MonoBehaviour
     [SerializeField] private float happiness = 0;
     [SerializeField] private List<Request> requests;
     [SerializeField] private GameObject requestPrefab;
+    [SerializeField] private Animator[] playerAnims;
     public int wave = -1;
     [Space]
     [SerializeField] private AnimationCurve wave1;
@@ -90,6 +91,9 @@ public class Waves : MonoBehaviour
             wave3Line.transform.GetChild(0).gameObject.SetActive(false);
             wave4Line.transform.GetChild(0).gameObject.SetActive(false);
             wave = 0;
+            playerAnims[0].SetBool("active", true);
+            playerAnims[1].SetBool("active", false);
+            playerAnims[2].SetBool("active", false);
         } 
         else if (mousePos >= wave2.Evaluate(t % waveLenght) / 2 + 0.5f - marging && mousePos <= wave2.Evaluate(t % waveLenght) / 2 + 0.5f + marging)
         {
@@ -97,8 +101,10 @@ public class Waves : MonoBehaviour
             wave2Line.transform.GetChild(0).gameObject.SetActive(true);
             wave3Line.transform.GetChild(0).gameObject.SetActive(false);
             wave4Line.transform.GetChild(0).gameObject.SetActive(false);
-
             wave = 1;
+            playerAnims[0].SetBool("active", false);
+            playerAnims[1].SetBool("active", true);
+            playerAnims[2].SetBool("active", false);
         } 
         else if (mousePos <= wave3.Evaluate(t % waveLenght) / 2 + -0.5f + marging && mousePos >= wave3.Evaluate(t % waveLenght) / 2 + -0.50f - marging)
         {
@@ -107,6 +113,9 @@ public class Waves : MonoBehaviour
             wave3Line.transform.GetChild(0).gameObject.SetActive(true);
             wave4Line.transform.GetChild(0).gameObject.SetActive(false);
             wave = 2;
+            playerAnims[0].SetBool("active", false);
+            playerAnims[1].SetBool("active", false);
+            playerAnims[2].SetBool("active", true);
         } 
         else if (mousePos <= wave4.Evaluate(t % waveLenght) / 2 + -1.5f + marging && mousePos >= wave4.Evaluate(t % waveLenght) / 2 + -1.5f - marging)
         {
@@ -115,6 +124,9 @@ public class Waves : MonoBehaviour
             wave3Line.transform.GetChild(0).gameObject.SetActive(false);
             wave4Line.transform.GetChild(0).gameObject.SetActive(true);
             wave = 3;
+            playerAnims[0].SetBool("active", true);
+            playerAnims[1].SetBool("active", true);
+            playerAnims[2].SetBool("active", true);
         }
         else
         {
@@ -123,6 +135,9 @@ public class Waves : MonoBehaviour
             wave3Line.transform.GetChild(0).gameObject.SetActive(false);
             wave4Line.transform.GetChild(0).gameObject.SetActive(false);
             wave = -1;
+            playerAnims[0].SetBool("active", false);
+            playerAnims[1].SetBool("active", false);
+            playerAnims[2].SetBool("active", false);
         }
     }
 
@@ -143,6 +158,6 @@ public class Waves : MonoBehaviour
     public void EndRequest(Request r)
     {
         requests.Remove(r);
-        Destroy(r.gameObject);
+        Destroy(r.gameObject,0.75f);
     }
 }
