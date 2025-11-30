@@ -54,6 +54,7 @@ public class Waves : MonoBehaviour
         wave2Line.positionCount = 50;
         wave3Line.positionCount = 50;
         wave4Line.positionCount = 50;
+        happinessBar.fillAmount = happiness / maxHappiness;
         spawnRequest = true;
         started = true;
         InvokeRepeating("NewRequest", 3, 3);

@@ -19,7 +19,7 @@ public class Audio : MonoBehaviour
 
     public void Init()
     {
-        //currentSong = Random.Range(0, playListe.Length);
+        currentSong = Random.Range(0, playListe.Length);
         StartCoroutine(FadeOut(0.5f));
         StartCoroutine(StartCrowd());
     }
