@@ -14,6 +14,7 @@ public class Waves : MonoBehaviour
     [SerializeField] private List<Request> requests;
     [SerializeField] private GameObject requestPrefab;
     [SerializeField] private Animator[] playerAnims;
+    [SerializeField] private Animator crowdAnims;
     public int wave = -1;
     [Space]
     [SerializeField] private AnimationCurve wave1;
@@ -173,11 +174,26 @@ public class Waves : MonoBehaviour
             EndAllRequest();
             //Win
             MainMenu.instance.Win();
+            spawnRequest = false;
+            started = false;
         }
         else if(happiness <= 0)
         {
             EndAllRequest();
             //Loose
+            MainMenu.instance.Loose();
+            spawnRequest = false;
+            started = false;
+            wave1Line.positionCount = 0;
+            wave2Line.positionCount = 0;
+            wave3Line.positionCount = 0;
+            wave4Line.positionCount = 0;
+            foreach(Animator p in playerAnims)
+            {
+                p.enabled = false;
+            }
+            crowdAnims.enabled = false;
+
         }
     }
 

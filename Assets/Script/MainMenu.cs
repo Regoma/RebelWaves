@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     public static MainMenu instance = null;
 
     public AudioClip endSound;
+    public AudioClip looseSound;
     private Animator anim;
 
     private void Awake()
@@ -32,12 +34,32 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    public void Retry()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     System.Collections.IEnumerator EStart()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.5f);
         Audio.instance.Init();
         yield return new WaitForSeconds(1f);
         Waves.instance.Init();
+    }
+
+    public void Loose()
+    {
+        StartCoroutine(ELoose());
+    }
+
+    System.Collections.IEnumerator ELoose()
+    {
+        Audio.instance.LoosingSound();
+        yield return new WaitForSeconds(0.5f);
+        anim.Play("Game-end_loose");
+        AudioSource.PlayClipAtPoint(looseSound, transform.position);
+        yield return new WaitForSeconds(0.5f);
+        Cursor.visible = true;
     }
 
     public void Win()
@@ -49,7 +71,8 @@ public class MainMenu : MonoBehaviour
     {
         anim.Play("Game-end_sucess");
         AudioSource.PlayClipAtPoint(endSound, transform.position);
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(2.5f);
         Audio.instance.StopSound();
+        Cursor.visible = true;
     }
 }

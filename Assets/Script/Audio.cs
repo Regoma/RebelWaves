@@ -7,6 +7,8 @@ public class Audio : MonoBehaviour
     [SerializeField] private AudioClip[] playListe;
     [SerializeField] private AudioSource sourceMusic;
     [SerializeField] private AudioSource[] sourceCrowd;
+    [Space]
+    [SerializeField] private AudioClip boo;
 
     private int currentSong = 0;
 
@@ -18,7 +20,7 @@ public class Audio : MonoBehaviour
     public void Init()
     {
         //currentSong = Random.Range(0, playListe.Length);
-        StartCoroutine(FadeOut(1.5f));
+        StartCoroutine(FadeOut(0.5f));
         StartCoroutine(StartCrowd());
     }
 
@@ -44,13 +46,26 @@ public class Audio : MonoBehaviour
         }
     }
 
+    public void LoosingSound()
+    {
+        sourceMusic.Stop();
+        foreach (AudioSource source in sourceCrowd)
+        {
+            source.Stop();
+            source.clip = boo;
+
+        }
+
+        StartCoroutine(StartCrowd());
+    }
+
     System.Collections.IEnumerator StartCrowd()
     {
         foreach(AudioSource source in sourceCrowd)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             source.Play();
-            yield return new WaitForSeconds(Random.Range(2, 6));
+            yield return new WaitForSeconds(Random.Range(1, 6));
 
         }
     }
