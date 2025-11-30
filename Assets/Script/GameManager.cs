@@ -4,11 +4,14 @@ using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Color[] col;
+    public float smoothSpeed = 8f;
+    public float heightMultiplier = 40f;
+
     float[] spectrum = new float[512];
     float[] barValues = new float[8];
 
-    public float smoothSpeed = 8f;
-    public float heightMultiplier = 40f;
+
 
     float[] bandBoost = {24f,8f,4f,2f,1f,1f,1f,1f};
 
@@ -37,6 +40,19 @@ public class GameManager : MonoBehaviour
             barValues[i] = Mathf.Lerp(barValues[i], target, Time.deltaTime * smoothSpeed);
 
             transform.GetChild(i).localScale = new Vector3(1, Mathf.Max(0.1f, barValues[i]), 1);
+        }
+
+
+        for(int i = 0; i < 8; i++)
+        {
+            if (Waves.instance.wave == -1)
+            {
+                transform.GetChild(i).GetChild(0).GetComponent<SpriteRenderer>().color = col[col.Length-1];
+            }
+            else
+            {
+                transform.GetChild(i).GetChild(0).GetComponent<SpriteRenderer>().color = col[Waves.instance.wave];
+            }
         }
     }
 

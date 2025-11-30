@@ -26,7 +26,7 @@ public class Request : MonoBehaviour
         if(Time.time - startTime > requestTime &&!completed && Waves.instance.wave != typeNb)
         {
             completed = true;
-            Waves.instance.Happiness(-10);
+            Waves.instance.Happiness(-5);
             Waves.instance.EndRequest(this);
             anim.Play("Request_fail");
         }

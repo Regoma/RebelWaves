@@ -31482,6 +31482,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ec14b33c1ae2414399a225b976baad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col:
+  - {r: 0.9960785, g: 0, b: 0, a: 0.05882353}
+  - {r: 0.2901961, g: 0.90196085, b: 0.25882354, a: 0.05882353}
+  - {r: 0, g: 0.3529412, b: 0.9960785, a: 0.11764706}
+  - {r: 0.7568628, g: 0, b: 0.9960785, a: 0.11764706}
+  - {r: 1, g: 1, b: 1, a: 0.019607844}
   smoothSpeed: 8
   heightMultiplier: 0.1
 --- !u!4 &1029315365
@@ -32480,8 +32486,8 @@ Transform:
   m_GameObject: {fileID: 1174540868}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.3491, y: -2.294, z: 0}
-  m_LocalScale: {x: 1.2737517, y: 1.1641, z: 1}
+  m_LocalPosition: {x: -4.29797, y: -2.294, z: 0}
+  m_LocalScale: {x: 1.3760332, y: 1.1641, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1098588018}
@@ -36227,7 +36233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   happinessBar: {fileID: 899354876}
-  maxHappiness: 300
+  maxHappiness: 200
   happiness: 50
   happinessFeedBack: {fileID: 856122673}
   requests: []
@@ -42931,7 +42937,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8266638460632569174, guid: ae4d2241d46511a45b6fc599343d7d62, type: 3}
       propertyPath: m_SortingOrder
-      value: -4
+      value: -5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44709,7 +44715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8266638460632569174, guid: ae4d2241d46511a45b6fc599343d7d62, type: 3}
       propertyPath: m_SortingOrder
-      value: -4
+      value: -5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
