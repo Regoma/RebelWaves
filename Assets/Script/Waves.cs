@@ -50,6 +50,7 @@ public class Waves : MonoBehaviour
     {
 
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
         wave1Line.positionCount = 50;
         wave2Line.positionCount = 50;
         wave3Line.positionCount = 50;
