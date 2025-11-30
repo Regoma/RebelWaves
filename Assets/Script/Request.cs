@@ -10,8 +10,8 @@ public class Request : MonoBehaviour
     [SerializeField] private float requestComplition = 0;
     private float startTime = 0;
 
-    private Animator anim;
-
+    public Animator anim;
+    private bool completed = false;
 
     void Start()
     {
@@ -23,11 +23,11 @@ public class Request : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time - startTime > requestTime)
+        if(Time.time - startTime > requestTime &&!completed && Waves.instance.wave != typeNb)
         {
+            completed = true;
             Waves.instance.Happiness(-10);
             Waves.instance.EndRequest(this);
-
             anim.Play("Request_fail");
         }
         else if (Waves.instance.wave == typeNb )
@@ -39,8 +39,9 @@ public class Request : MonoBehaviour
     public void RequestUpdate(float x)
     {
         requestComplition += x;
-        if(requestComplition >= 5)
+        if(requestComplition >= 5 && !completed)
         {
+            completed = true;
             Waves.instance.Happiness(10);
             Waves.instance.EndRequest(this);
             anim.Play("Request_sucess");

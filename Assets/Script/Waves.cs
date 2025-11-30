@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 
 public class Waves : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Waves : MonoBehaviour
     [SerializeField] private Image happinessBar;
     [SerializeField] private float maxHappiness;
     [SerializeField] private float happiness = 0;
+    [SerializeField] private Animator happinessFeedBack;
     [SerializeField] private List<Request> requests;
     [SerializeField] private GameObject requestPrefab;
     [SerializeField] private Animator[] playerAnims;
@@ -29,35 +31,52 @@ public class Waves : MonoBehaviour
     [SerializeField] private float lineVertex;
     [SerializeField] private float speed;
     [SerializeField] private float marging;
+    [Space]
+    [SerializeField] private AudioMixer mixer;
 
     private float mousePos;
     private float t;
+
+    private bool spawnRequest = false;
+    private bool started = false;
 
     private void Awake()
     {
         instance = this;
     }
 
-    void Start()
+    public void Init()
     {
+
         Cursor.visible = false;
         wave1Line.positionCount = 50;
         wave2Line.positionCount = 50;
         wave3Line.positionCount = 50;
         wave4Line.positionCount = 50;
-        InvokeRepeating("NewRequest", 1, 3);
+        spawnRequest = true;
+        started = true;
+        InvokeRepeating("NewRequest", 3, 3);
     }
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!started)
+            return;
+
         mousePos += Input.GetAxis("Mouse Y") *0.5f;
         mousePos = Mathf.Clamp(mousePos, -2, 2);
         mouseCursor.localPosition = new Vector2(0, mousePos);
+        mixer.SetFloat("PitchMusic", Mathf.Lerp(0.9f, 1.1f, mousePos / 2));
+
     }
 
     private void Update()
     {
+        if (!started)
+            return;
+
         t += Time.deltaTime * speed;
 
         if (t > waveLenght)
@@ -143,21 +162,46 @@ public class Waves : MonoBehaviour
 
     public void Happiness(float x)
     {
-        happiness += x;
+        string animUi = x > 0 ? "Ui_up" : "Ui_down";
+        happinessFeedBack.Play(animUi);
+
+        happiness = Mathf.Clamp(happiness + x, 0,maxHappiness);
         happinessBar.fillAmount = happiness / maxHappiness;
+
+        if(happiness >= maxHappiness)
+        {
+            EndAllRequest();
+            //Win
+            MainMenu.instance.Win();
+        }
+        else if(happiness <= 0)
+        {
+            EndAllRequest();
+            //Loose
+        }
     }
 
     public void NewRequest()
     {
-        if (requests.Count > 5)
+        if (requests.Count > 5 || !spawnRequest)
             return;
-        Request r = Instantiate(requestPrefab, new Vector3(Random.Range(-4f,8f), Random.Range(-3.5f,-4f),0),  Quaternion.identity).transform.GetComponent<Request>();
+        Request r = Instantiate(requestPrefab, new Vector3(Random.Range(-7f,8f), Random.Range(-3.5f,-4f),0),  Quaternion.identity).transform.GetComponent<Request>();
         requests.Add(r);
     }
 
     public void EndRequest(Request r)
     {
         requests.Remove(r);
-        Destroy(r.gameObject,0.75f);
+        Destroy(r.gameObject,0.6f);
+    }
+
+    private void EndAllRequest()
+    {
+        spawnRequest = false;
+        foreach(Request r in requests)
+        {
+            r.anim.Play("Request_fail");
+            Destroy(r.gameObject, 0.6f);
+        }
     }
 }

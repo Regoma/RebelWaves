@@ -14,5 +14,7 @@ public class Cloud : MonoBehaviour
     void Update()
     {
         transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
+        if (transform.position.x >= 30)
+            transform.position = new Vector3(-30, transform.position.y, transform.position.z);
     }
 }
