@@ -8,18 +8,23 @@ public class GameManager : MonoBehaviour
     public float smoothSpeed = 8f;
     public float heightMultiplier = 40f;
 
-    float[] spectrum = new float[512];
-    float[] barValues = new float[8];
+    private float[] spectrum = new float[512];
+    private float[] barValues = new float[8];
 
+    private float[] bandBoost = {24f,8f,4f,2f,1f,1f,1f,1f};
 
+    private int[] freqBands = { 2, 4, 8, 16, 32, 64, 128, 256 };
 
-    float[] bandBoost = {24f,8f,4f,2f,1f,1f,1f,1f};
+    private AudioSource music;
 
-    int[] freqBands = { 2, 4, 8, 16, 32, 64, 128, 256 };
+    private void Start()
+    {
+        music = Audio.instance.transform.GetComponent<AudioSource>();
+    }
 
     void Update()
     {
-        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Blackman);
+        music.GetSpectrumData(spectrum, 0, FFTWindow.Blackman);
 
         int index = 0;
 
